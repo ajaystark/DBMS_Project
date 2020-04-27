@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>DBMS Project</title>
+    <link rel="stylesheet" href="../static/login.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+
+    <div id="mainCoantiner">
+        <div class="main-header text-center text-white">
+            <h1>Team 59</h1>
+        </div>
+
+        <!--dust particel-->
+        <div>
+            <div class="starsec"></div>
+            <div class="starthird"></div>
+            <div class="starfourth"></div>
+            <div class="starfifth"></div>
+        </div>
+        <!--Dust particle end--->
+        <form id="loginform" method="POST">
+            <div class="container text-center text-dark mt-5">
+                <div class="row">
+                    <div class="col-lg-4 d-block mx-auto mt-5">
+                        <div class="row">
+                            <div class="col-xl-12 col-md-12 col-md-12">
+                                <div class="card">
+                                    <div class="card-body wow-bg" id="formBg">
+                                        <h3 class="colorboard">Login</h3>
+
+                                        <p class="text-muted">Sign In to your account</p>
+
+                                        <div class="input-group mb-3"> <input type="text" class="form-control textbox-dg" placeholder="Username" name="username"> </div>
+                                        <div class="input-group mb-4"> <input type="password" class="form-control textbox-dg" placeholder="Password" name="password"> </div>
+
+                                        <div class="row">
+                                            <div class="col-12"> <button type="submit" class="btn btn-primary btn-block logn-btn">Login</button> </div>
+                                            <div class="col-12"> <a href="forgot-password.html" class="btn btn-link box-shadow-0 px-0">Forgot password?</a> </div>
+                                        </div>
+
+                                        <div class="mt-6 btn-list">
+                                            <button type="button" class="socila-btn btn btn-icon btn-facebook fb-color"><i class="fab fa-facebook-f faa-ring animated"></i></button> <button type="button" class="socila-btn btn btn-icon btn-google incolor"><i class="fab fa-linkedin-in faa-flash animated"></i></button>                                            <button type="button" class="socila-btn btn btn-icon btn-twitter tweetcolor"><i class="fab fa-twitter faa-shake animated"></i></button> <button type="button" class="socila-btn btn btn-icon btn-dribbble driblecolor"><i class="fab fa-dribbble faa-pulse animated"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {%if error%}
+                <h3 class="text-danger p-3">{{error}}</h3> {%endif%}
+                <div class="my-5 py-5"></div>
+                <div class="my-5 py-4"></div>
+            </div>
+        </form>
+    </div>
+
+</body>
+
+</html>
+
+<script>
+    $('#nmberone').click(function() {
+        $('#mainCoantiner, #formBg').removeClass('mystyleSec');
+        $('#mainCoantiner, #formBg').removeClass('mystylethird');
+        event.stopPropagation();
+    });
+
+
+
+    $('#nmbertwo').click(function() {
+        $('#mainCoantiner, #formBg').removeClass('mystylethird');
+        $('#mainCoantiner, #formBg').addClass('mystyleSec');
+        event.stopPropagation();
+    });
+
+
+    $('#numberthree').click(function() {
+        /* $('#catbox').removeClass('cat2');*/
+        $('#mainCoantiner, #formBg').addClass('mystylethird');
+        event.stopPropagation();
+    });
+</script>
