@@ -1,0 +1,5 @@
+"userId";"type";"username";"password";"name";"email";"contact";"id";"image"
+1;"Patient";"patient";"patient";"Test Patient";"patient@gmail.com";"9911693131";2;"patient.jpg"
+2;"Doctor";"doctor";"doctor";"Test Doctor";"doctor@gmail.com";"2739823";7;"doctor.jpg"
+3;"Hospital";"hospital";"hospital";"Test Hospital";"hospital@gmail.com";"327973";3;"hospital.jpg"
+4;"Chemist";"chemist";"chemist";"Test Chemist";"chemist@gmail.com";"3278273";1;"chemist.jpg"
