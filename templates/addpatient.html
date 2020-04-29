@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Welcome {{name}}</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@600&display=swap" rel="stylesheet">
+</head>
+
+<body class="container">
+    <div class="p-3 text-center">
+        <h1 class="text-white">Add Patient</h1>
+    </div>
+    <form class="form-group" action="/addPatient" method="POST">
+        <input required class="form-control m-3" type="hidden" name="name" value="{{user_data[0]}}" placeholder="">
+        <input required class="form-control m-3" type="hidden" name="type" value="{{user_data[1]}}" placeholder="">
+        <input required class="form-control m-3" type="hidden" name="ID" value="{{user_data[2]}}" placeholder="">
+        <input required class="form-control m-3" type="hidden" name="userId" value="{{user_data[6]}}" placeholder="">
+
+        <div>
+            <label for="">Disease Name :</label>
+            <div>
+                <input required class="form-control m-3" type="text" name="disease_name" placeholder="Disease Name">
+
+            </div>
+        </div>
+        <input required class="form-control m-3" type="number" name="patientId" placeholder="Patient Id">
+        <input required class="form-control m-3" type="date" name="detection_date" placeholder="Detection Date : YYYY-MM-DD">
+        <input required class="form-control m-3" type="date" name="treatment_end_date" placeholder="Treatment End Date : YYYY-MM-DD">
+        <input required class="form-control m-3" type="file" name="prescription_report" placeholder="Prescription Report">
+        <input required class="form-control m-3" type="number" name="hospitalId" placeholder="Hospital Id">
+        <div class="w-100 text-center">
+            <button id="patientbutton" type="submit" class="btn btn-primary">Add Patient</button>
+        </div>
+    </form>
+</body>
+
+<style>
+    .sans {
+        color: #82ccdd;
+        font-family: 'Source Sans Pro', sans-serif;
+    }
+    
+    body {
+        background-color: #181828;
+    }
+    
+    th {
+        cursor: pointer;
+    }
+</style>
+
+</html>

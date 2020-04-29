@@ -16,16 +16,47 @@
         <button class="btn btn-danger" onclick="location.href = '/login';">Logout</button>
     </div>
     <div class="w-100 text-center px-5">
-        <h3 class="sans">{{user_data[0]}}</h3>
-        <h3 class="sans">{{user_data[1]}}</h3>
+
+        <div class="row mb-4">
+            <div class="col text-right ">
+                <img src="../static/{{user_data[7]}}" class="profile-image mt-4" alt="">
+            </div>
+            <div class="col text-left">
+
+                <h3 class="sans">Profile : {{user_data[1]}}</h3>
+                <h3 class="sans">Name : {{user_data[3]}}</h3>
+                <h3 class="sans">Email : {{user_data[4]}}</h3>
+                <h3 class="sans">Contact : {{user_data[5]}}</h3>
+            </div>
+        </div>
         <form action="/searchPatient">
             <input type="hidden" name="name" value="{{user_data[0]}}" placeholder="">
             <input type="hidden" name="type" value="{{user_data[1]}}" placeholder="">
             <input type="hidden" name="ID" value="{{user_data[2]}}" placeholder="">
-            <button id="patientbutton" type="submit" class="btn btn-primary">Submit</button>
+            <input type="hidden" name="userId" value="{{user_data[6]}}" placeholder=""> {% if user_data[1]=="Chemist" %}
+
+            <input type="integer" name="recordId" placeholder="Record ID"> {%endif%}
+
+            <button id="patientbutton" type="submit" class="btn btn-primary">
+                {% if user_data[1]=="Doctor" %}
+                    Get History
+                {%endif%}
+                {% if user_data[1]=="Patient" %}
+                    Get Medical History
+                {%endif%}
+                {% if user_data[1]=="Chemist" %}
+                    Get Record
+                {%endif%}
+                {% if user_data[1]=="Hospital" %}
+                    Get Employees
+                {%endif%}
+
+
+            </button>
+
         </form>
     </div>
-    {% if user_data[1]=="Patient" %} {%if data%}
+    {% if user_data[1]=="Patient" or user_data[1]=="Doctor" %} {%if data%}
     <div class="container p-3">
         <h4 class="text-primary">Your Medical History is :</h4>
         <input class="m-3" type="text" id="myInput" onkeyup="myFunction()" placeholder="Search Disease" title="Disease Name">
@@ -41,6 +72,7 @@
                     <th scope="col">Test Name</th>
                     <th scope="col">Lab Name</th>
                     <th scope="col">Amount</th>
+                    <th scope="col">Patient ID</th>
                 </tr>
             </thead>
             <tbody>
@@ -55,12 +87,109 @@
                     <td>{{item[5]}}</td>
                     <td>{{item[6]}}</td>
                     <td>{{item[7]}}</td>
+                    <td>{{item[8]}}</td>
                 </tr>
                 {%endfor%}
             </tbody>
         </table>
     </div>
-    {%endif%} {%endif%}
+    {%endif%} {%endif%} {% if user_data[1]=="Chemist" %} {%if data%}
+    <div class="container">
+        <table class="table mt-3 table-bordered table-striped table-dark">
+            <thead>
+                <tr>
+                    <th scope="col">Record Id</th>
+                    <th scope="col">Disease Name</th>
+                    <th scope="col">Patient Id</th>
+                    <th scope="col">Doctor Id</th>
+                    <th scope="col">Prescription</th>
+                    <th scope="col">Detection Date</th>
+                    <th scope="col">Treatment End Date</th>
+                    <th scope="col">Hospital Id</th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for item in data%}
+                <tr>
+                    <td>{{item[0]}}</td>
+                    <td>{{item[1]}}</td>
+                    <td>{{item[2]}}</td>
+                    <td>{{item[3]}}</td>
+                    <td>{{item[4]}}</td>
+                    <td>{{item[5]}}</td>
+                    <td>{{item[6]}}</td>
+                    <td>{{item[7]}}</td>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>{%endif%}
+    </div>
+    {%endif%}
+    <div class="container"> {% if user_data[1]=="Doctor" %}
+        <form action="/searchSymtoms">
+            <input type="hidden" name="name" value="{{user_data[0]}}" placeholder="">
+            <input type="hidden" name="type" value="{{user_data[1]}}" placeholder="">
+            <input type="hidden" name="ID" value="{{user_data[2]}}" placeholder="">
+            <input type="hidden" name="userId" value="{{user_data[6]}}" placeholder="">
+            <input class="m-3" type="text" placeholder="Search Symtoms" title="Symptoms" name='symptomname'>
+            <button id="patientbutton" type="submit" class="btn btn-sm btn-primary">Search</button>
+        </form>
+        <form action="/addPatient">
+            <input type="hidden" name="name" value="{{user_data[0]}}" placeholder="">
+            <input type="hidden" name="type" value="{{user_data[1]}}" placeholder="">
+            <input type="hidden" name="ID" value="{{user_data[2]}}" placeholder="">
+            <input type="hidden" name="userId" value="{{user_data[6]}}" placeholder="">
+            <button style="position: absolute; bottom:20px; right:20px;" type="submit" class="btn btn-info">Add Patient</button>
+        </form>
+        {%if symtomdata %}
+        <table class="table table-bordered table-striped table-dark">
+            <thead>
+                <tr>
+                    <th scope="col">No.</th>
+                    <th scope="col">Disease Name</th>
+                    <th scope="col">Tests Required</th>
+                    <th scope="col">Symtoms</th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for item in symtomdata%}
+                <tr>
+                    <td>{{loop.index}}</td>
+                    <td>{{item[0]}}</td>
+                    <td>{{item[1]}}</td>
+                    <td>{{item[2]}}</td>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+        {%endif%} {%endif%} {% if user_data[1]=="Hospital" %} {%if data%}
+        <table class="table mt-3 table-bordered table-striped table-dark">
+            <thead>
+                <tr>
+                    <th scope="col">Doctor Name</th>
+                    <th scope="col">Work Start Time</th>
+                    <th scope="col">Work End Time</th>
+                    <th scope="col">Medical Field</th>
+                    <th scope="col">Contact</th>
+                    <th scope="col">Salary</th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for item in data%}
+                <tr>
+                    <td>{{item[6]}}</td>
+                    <td>{{item[3]}}</td>
+                    <td>{{item[4]}}</td>
+                    <td>{{item[3]}}</td>
+                    <td>{{item[7]}}</td>
+                    <td>{{item[8]}}</td>
+                    <td>{{item[2]}}</td>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table> {%endif%} {%endif%}
+    </div>
+
 </body>
 
 <style>
@@ -75,6 +204,11 @@
     
     th {
         cursor: pointer;
+    }
+    
+    .profile-image {
+        height: 100px;
+        border-radius: 50%;
     }
 </style>
 <script src="https://www.w3schools.com/lib/w3.js"></script>
