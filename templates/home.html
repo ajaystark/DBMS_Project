@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Welcome {{name}}</title>
+    <title>Welcome {{user_info[1]}}</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
@@ -18,28 +18,65 @@
     <div class="w-100 text-center px-5">
 
         <div class="row mb-4">
-            <div class="col text-right ">
-                <img src="../static/{{user_data[7]}}" class="profile-image mt-4" alt="">
+            <div class="col text-right">
+                <img src="../static/{{user_data[7]}}" class="profile-image mr-5" alt="">
             </div>
             <div class="col text-left">
-
-                <h3 class="sans">Profile : {{user_data[1]}}</h3>
-                <h3 class="sans">Name : {{user_data[3]}}</h3>
-                <h3 class="sans">Email : {{user_data[4]}}</h3>
-                <h3 class="sans">Contact : {{user_data[5]}}</h3>
+                {% if user_data[1]=="Patient" %}
+                <h3 class="sans">Patient ID : {{user_info[0]}}</h3>
+                <h3 class="sans">Name : {{user_info[1]}}</h3>
+                <h3 class="sans">Address : {{user_info[3]}} , {{user_info[4]}}</h3>
+                <h3 class="sans">Contact : {{user_info[2]}}</h3>
+                <h3 class="sans">Blood Group : {{user_info[8]}}</h3>
+                <h3 class="sans">Email : {{user_info[10]}}</h3>
+                {%endif%} {% if user_data[1]=="Doctor" %}
+                <h3 class="sans">Doctor ID : {{user_info[0]}}</h3>
+                <h3 class="sans">Name : {{user_info[1]}}</h3>
+                <h3 class="sans">Address : {{user_info[4]}} , {{user_info[8]}}</h3>
+                <h3 class="sans">Contact : {{user_info[3]}}</h3>
+                <h3 class="sans">Medical Field : {{user_info[2]}}</h3>
+                {%endif%} {% if user_data[1]=="Hospital" %}
+                <h3 class="sans">Hospital ID : {{user_info[0]}}</h3>
+                <h3 class="sans">Name : {{user_info[1]}}</h3>
+                <h3 class="sans">Address : {{user_info[7]}}</h3>
+                <h3 class="sans">Type : {{user_info[6]}}</h3>
+                {%endif%} {% if user_data[1]=="Chemist" %}
+                <h3 class="sans">Lab ID : {{user_info[0]}}</h3>
+                <h3 class="sans">Name : {{user_info[1]}}</h3>
+                <h3 class="sans">Address : {{user_info[7]}}</h3>
+                <h3 class="sans">Tests : {{user_info[6]}}</h3>
+                {%endif%}
             </div>
         </div>
-        <form action="/searchPatient">
-            <input type="hidden" name="name" value="{{user_data[0]}}" placeholder="">
-            <input type="hidden" name="type" value="{{user_data[1]}}" placeholder="">
-            <input type="hidden" name="ID" value="{{user_data[2]}}" placeholder="">
-            <input type="hidden" name="userId" value="{{user_data[6]}}" placeholder=""> {% if user_data[1]=="Chemist" %}
 
-            <input type="integer" name="recordId" placeholder="Record ID"> {%endif%}
+        <div class="container"> {% if user_data[1]=="Doctor" %}
+            <form action="/searchSymtoms">
+                <input type="hidden" name="name" value="{{user_data[0]}}" placeholder="">
+                <input type="hidden" name="type" value="{{user_data[1]}}" placeholder="">
+                <input type="hidden" name="ID" value="{{user_data[2]}}" placeholder="">
+                <input type="hidden" name="userId" value="{{user_data[6]}}" placeholder="">
+                <input class="m-3" type="text" placeholder="Search Symtoms" title="Symptoms" name='symptomname'>
+                <button id="patientbutton" type="submit" class="btn btn-sm btn-primary">Search</button>
+            </form>
+            <form action="/addPatient">
+                <input type="hidden" name="name" value="{{user_data[0]}}" placeholder="">
+                <input type="hidden" name="type" value="{{user_data[1]}}" placeholder="">
+                <input type="hidden" name="ID" value="{{user_data[2]}}" placeholder="">
+                <input type="hidden" name="userId" value="{{user_data[6]}}" placeholder="">
+                <button style="position: fixed; top:20px; left:20px;" type="submit" class="btn btn-info">Add Patient</button>
+            </form>
+            {%endif%}
+            <form action="/searchPatient">
+                <input type="hidden" name="name" value="{{user_data[0]}}" placeholder="">
+                <input type="hidden" name="type" value="{{user_data[1]}}" placeholder="">
+                <input type="hidden" name="ID" value="{{user_data[2]}}" placeholder="">
+                <input type="hidden" name="userId" value="{{user_data[6]}}" placeholder=""> {% if user_data[1]=="Chemist" %}
 
-            <button id="patientbutton" type="submit" class="btn btn-primary">
+                <input type="integer" name="recordId" placeholder="Record ID"> {%endif%}
+
+                <button id="patientbutton" type="submit" class="btn btn-primary">
                 {% if user_data[1]=="Doctor" %}
-                    Get History
+                    Patient History
                 {%endif%}
                 {% if user_data[1]=="Patient" %}
                     Get Medical History
@@ -54,118 +91,114 @@
 
             </button>
 
-        </form>
-    </div>
-    {% if user_data[1]=="Patient" or user_data[1]=="Doctor" %} {%if data%}
-    <div class="container p-3">
-        <h4 class="text-primary">Your Medical History is :</h4>
-        <input class="m-3" type="text" id="myInput" onkeyup="myFunction()" placeholder="Search Disease" title="Disease Name">
-        <table id="Table1" class="table table-bordered table-striped table-dark">
-            <thead>
-                <tr>
-                    <th scope="col">No.</th>
-                    <th scope="col">Disease Name</th>
-                    <th scope="col">Doctor Name</th>
-                    <th scope="col">Detection Date</th>
-                    <th scope="col">Treatment End Date</th>
-                    <th scope="col">Hospital</th>
-                    <th scope="col">Test Name</th>
-                    <th scope="col">Lab Name</th>
-                    <th scope="col">Amount</th>
-                    <th scope="col">Patient ID</th>
-                </tr>
-            </thead>
-            <tbody>
-                {%for item in data%}
-                <tr>
-                    <td>{{loop.index}}</td>
-                    <td>{{item[0]}}</td>
-                    <td>{{item[1]}}</td>
-                    <td>{{item[2]}}</td>
-                    <td>{{item[3]}}</td>
-                    <td>{{item[4]}}</td>
-                    <td>{{item[5]}}</td>
-                    <td>{{item[6]}}</td>
-                    <td>{{item[7]}}</td>
-                    <td>{{item[8]}}</td>
-                </tr>
-                {%endfor%}
-            </tbody>
-        </table>
-    </div>
-    {%endif%} {%endif%} {% if user_data[1]=="Chemist" %} {%if data%}
-    <div class="container">
+            </form>
+        </div>
+        {% if user_data[1]=="Patient" or user_data[1]=="Doctor" %} {%if data%}
+        <div class=" p-3">
+            {% if user_data[1]=="Doctor" %}
+            <h4 class="text-primary">History of patients you treated :</h4>
+            {%endif%} {% if user_data[1]=="Patient" %}
+            <h4 class="text-primary">Your Medical History is :</h4>
+            {%endif%}
+
+            <input class="m-3" type="text" id="myInput" onkeyup="myFunction()" placeholder="Search Disease" title="Disease Name">
+            <table id="Table1" class="table table-bordered table-striped table-dark">
+                <thead>
+                    <tr>
+                        <th scope="col">No.</th>
+                        <th scope="col">Record Id</th>
+                        <th scope="col">Patient ID</th>
+                        <th scope="col">Disease Name</th>
+                        <th scope="col">Doctor Name</th>
+                        <th scope="col">Detection Date</th>
+                        <th scope="col">Treatment End Date</th>
+                        <th scope="col">Hospital</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Test Name</th>
+                        <th scope="col">Lab Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%for item in data%}
+                    <tr>
+                        <td>{{loop.index}}</td>
+                        <td>{{item[8]}}</td>
+                        <td>{{item[9]}}</td>
+                        <td>{{item[0]}}</td>
+                        <td>{{item[1]}}</td>
+                        <td>{{item[2]}}</td>
+                        <td>{{item[3]}}</td>
+                        <td>{{item[4]}}</td>
+                        <td>{{item[5]}}</td>
+                        <td>{{item[6]}}</td>
+                        <td>{{item[7]}}</td>
+                    </tr>
+                    {%endfor%}
+                </tbody>
+            </table>
+        </div>
+        {%endif%} {%endif%} {% if user_data[1]=="Chemist" %} {%if data%}
+        <div class="container">
+            <table class="table mt-3 table-bordered table-striped table-dark">
+                <thead>
+                    <tr>
+                        <th scope="col">Record Id</th>
+                        <th scope="col">Disease Name</th>
+                        <th scope="col">Patient Id</th>
+                        <th scope="col">Doctor Id</th>
+                        <th scope="col">Prescription</th>
+                        <th scope="col">Detection Date</th>
+                        <th scope="col">Treatment End Date</th>
+                        <th scope="col">Hospital Id</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%for item in data%}
+                    <tr>
+                        <td>{{item[0]}}</td>
+                        <td>{{item[1]}}</td>
+                        <td>{{item[2]}}</td>
+                        <td>{{item[3]}}</td>
+                        <td>{{item[4]}}</td>
+                        <td>{{item[5]}}</td>
+                        <td>{{item[6]}}</td>
+                        <td>{{item[7]}}</td>
+                    </tr>
+                    {%endfor%}
+                </tbody>
+            </table>{%endif%}
+        </div>
+        {%endif%}
+
+        <div class="container p-3">
+            {%if symtomdata %}
+            <table class="table table-bordered table-striped table-dark">
+                <thead>
+                    <tr>
+                        <th scope="col">No.</th>
+                        <th scope="col">Disease Name</th>
+                        <th scope="col">Tests Required</th>
+                        <th scope="col">Symtoms</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%for item in symtomdata%}
+                    <tr>
+                        <td>{{loop.index}}</td>
+                        <td>{{item[0]}}</td>
+                        <td>{{item[1]}}</td>
+                        <td>{{item[2]}}</td>
+                    </tr>
+                    {%endfor%}
+                </tbody>
+            </table>
+            {%endif%}
+        </div>
+        {% if user_data[1]=="Hospital" %} {%if data%}
         <table class="table mt-3 table-bordered table-striped table-dark">
             <thead>
                 <tr>
-                    <th scope="col">Record Id</th>
-                    <th scope="col">Disease Name</th>
-                    <th scope="col">Patient Id</th>
-                    <th scope="col">Doctor Id</th>
-                    <th scope="col">Prescription</th>
-                    <th scope="col">Detection Date</th>
-                    <th scope="col">Treatment End Date</th>
                     <th scope="col">Hospital Id</th>
-                </tr>
-            </thead>
-            <tbody>
-                {%for item in data%}
-                <tr>
-                    <td>{{item[0]}}</td>
-                    <td>{{item[1]}}</td>
-                    <td>{{item[2]}}</td>
-                    <td>{{item[3]}}</td>
-                    <td>{{item[4]}}</td>
-                    <td>{{item[5]}}</td>
-                    <td>{{item[6]}}</td>
-                    <td>{{item[7]}}</td>
-                </tr>
-                {%endfor%}
-            </tbody>
-        </table>{%endif%}
-    </div>
-    {%endif%}
-    <div class="container"> {% if user_data[1]=="Doctor" %}
-        <form action="/searchSymtoms">
-            <input type="hidden" name="name" value="{{user_data[0]}}" placeholder="">
-            <input type="hidden" name="type" value="{{user_data[1]}}" placeholder="">
-            <input type="hidden" name="ID" value="{{user_data[2]}}" placeholder="">
-            <input type="hidden" name="userId" value="{{user_data[6]}}" placeholder="">
-            <input class="m-3" type="text" placeholder="Search Symtoms" title="Symptoms" name='symptomname'>
-            <button id="patientbutton" type="submit" class="btn btn-sm btn-primary">Search</button>
-        </form>
-        <form action="/addPatient">
-            <input type="hidden" name="name" value="{{user_data[0]}}" placeholder="">
-            <input type="hidden" name="type" value="{{user_data[1]}}" placeholder="">
-            <input type="hidden" name="ID" value="{{user_data[2]}}" placeholder="">
-            <input type="hidden" name="userId" value="{{user_data[6]}}" placeholder="">
-            <button style="position: absolute; bottom:20px; right:20px;" type="submit" class="btn btn-info">Add Patient</button>
-        </form>
-        {%if symtomdata %}
-        <table class="table table-bordered table-striped table-dark">
-            <thead>
-                <tr>
-                    <th scope="col">No.</th>
-                    <th scope="col">Disease Name</th>
-                    <th scope="col">Tests Required</th>
-                    <th scope="col">Symtoms</th>
-                </tr>
-            </thead>
-            <tbody>
-                {%for item in symtomdata%}
-                <tr>
-                    <td>{{loop.index}}</td>
-                    <td>{{item[0]}}</td>
-                    <td>{{item[1]}}</td>
-                    <td>{{item[2]}}</td>
-                </tr>
-                {%endfor%}
-            </tbody>
-        </table>
-        {%endif%} {%endif%} {% if user_data[1]=="Hospital" %} {%if data%}
-        <table class="table mt-3 table-bordered table-striped table-dark">
-            <thead>
-                <tr>
                     <th scope="col">Doctor Name</th>
                     <th scope="col">Work Start Time</th>
                     <th scope="col">Work End Time</th>
@@ -177,10 +210,10 @@
             <tbody>
                 {%for item in data%}
                 <tr>
+                    <td>{{item[1]}}</td>
                     <td>{{item[6]}}</td>
                     <td>{{item[3]}}</td>
                     <td>{{item[4]}}</td>
-                    <td>{{item[3]}}</td>
                     <td>{{item[7]}}</td>
                     <td>{{item[8]}}</td>
                     <td>{{item[2]}}</td>
@@ -189,7 +222,15 @@
             </tbody>
         </table> {%endif%} {%endif%}
     </div>
+    <div class="w-100 p-3 text-center text-white" style="position:fixed; bottom:0px;">
+        <a class="pl-3" href="https://github.com/ajaystark/DBMS_Project" style="color: #d4d23a;"> <code>Source Code</code> </a>
+        <p class="footer-heart">
+            Made with
+            <g-emoji class="g-emoji" alias="heart" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/2764.png">
+                <img class="emoji" alt="heart" height="20" width="20" src="https://github.githubassets.com/images/icons/emoji/unicode/2764.png"></g-emoji> by <a href="https://ajaystark.github.io">Team 59</a>
 
+        </p>
+    </div>
 </body>
 
 <style>
@@ -207,8 +248,34 @@
     }
     
     .profile-image {
-        height: 100px;
-        border-radius: 50%;
+        height: 200px;
+    }
+    
+    .footer-heart {
+        text-align: center;
+        font-family: open sans, sans-serif;
+    }
+    
+    .footer-heart a {
+        border-bottom: 1px solid #6b60a1;
+        color: #35af59;
+        padding-bottom: .25em;
+        text-decoration: none;
+    }
+    
+    .footer-heart a:hover {
+        color: #2196f3;
+        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg id='squiggle-link' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:ev='http://www.w3.org/2001/xml-events' viewBox='0 0 20 4'%3E%3Cstyle type='text/css'%3E.squiggle{animation:shift .3s linear infinite;}@keyframes shift {from {transform:translateX(0);}to {transform:translateX(-20px);}}%3C/style%3E%3Cpath fill='none' stroke='%23453886' stroke-width='2' class='squiggle' d='M0,3.5 c 5,0,5,-3,10,-3 s 5,3,10,3 c 5,0,5,-3,10,-3 s 5,3,10,3'/%3E%3C/svg%3E");
+        background-position: bottom;
+        background-repeat: repeat-x;
+        background-size: 20%;
+        border-bottom: 0;
+        padding-bottom: .3em;
+        text-decoration: none;
+    }
+    
+    .emoji {
+        vertical-align: middle;
     }
 </style>
 <script src="https://www.w3schools.com/lib/w3.js"></script>
@@ -277,7 +344,7 @@
         table = document.getElementById("Table1");
         tr = table.getElementsByTagName("tr");
         for (i = 0; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName("td")[1];
+            td = tr[i].getElementsByTagName("td")[3];
             if (td) {
                 txtValue = td.textContent || td.innerText;
                 if (txtValue.toUpperCase().indexOf(filter) > -1) {
@@ -287,6 +354,9 @@
                 }
             }
         }
+    }
+    if ("{{alert}}" == "True") {
+        alert("Patient Added Successfully")
     }
 </script>
 
