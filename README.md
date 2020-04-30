@@ -1,2 +1,2 @@
 # DBMS_Project
-DBMS Project
+DBMS Project on Health Record Database
