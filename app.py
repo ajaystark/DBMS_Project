@@ -34,22 +34,7 @@ def not_found(error=None):
     resp.status_code = 404
     return resp
 
-@app.route("/login",methods=['GET','POST'])
-def login():
-    if request.method=='GET':
-        return render_template('login.html')
-    if request.method=="POST":
-        data=request.form
-        username=data.get('username')
-        password=data.get('password')
-        
-        q='''select username,type,id,name,email,contact,userId,image from User where username='{0}' and password='{1}' ;'''.format(username,password)
-        cursor=mysql.connection.cursor()
-        cursor.execute(q)
-        record=cursor.fetchone()
-        
-        
-        if record!=None:
+@app.route("/login",m
             if record[1]=='Patient':
                 q='''select * from patients where patient_ID='{}';'''.format(record[2])
             if record[1]=='Doctor':
